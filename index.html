@@ -4,19 +4,55 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blossoming Flowers</title>
+  <title>Magical Blossoming Night</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="not-loaded">
-  <div class="night"></div>
+<body class="not-loaded" data-theme="sakura">
+  <!-- Bầu trời đêm sao băng & đom đóm tương tác -->
+  <canvas id="sky-canvas"></canvas>
+
+  <!-- Ánh cực quang & trăng khuyết -->
+  <div class="night">
+    <div class="aurora aurora--1"></div>
+    <div class="aurora aurora--2"></div>
+    <div class="moon"></div>
+  </div>
+
+  <!-- Sương mù phát sáng dưới mặt đất -->
+  <div class="ground-mist"></div>
+
+  <!-- Thanh điều khiển tinh tế -->
+  <div class="controls" aria-label="Điều khiển hiệu ứng">
+    <button type="button" class="ctrl-btn" id="replay-btn" title="Xem hoa mọc lại từ đầu">
+      <span>✨ Nở lại</span>
+    </button>
+    <div class="theme-dots" role="group" aria-label="Đổi màu hoa">
+      <button type="button" class="theme-dot active" data-theme-select="sakura" title="Hồng Anh Đào" style="--dot:#ff7eb3"></button>
+      <button type="button" class="theme-dot" data-theme-select="violet" title="Tím Ngân Hà" style="--dot:#c084fc"></button>
+      <button type="button" class="theme-dot" data-theme-select="moonlight" title="Xanh Ánh Trăng" style="--dot:#38bdf8"></button>
+      <button type="button" class="theme-dot" data-theme-select="golden" title="Vàng Ánh Sao" style="--dot:#fbbf24"></button>
+    </div>
+  </div>
+
   <div class="flowers">
+    <!-- Bông hoa 1: Bông chính giữa cao nhất (8 cánh 2 tầng + nhị hoa phát sáng) -->
     <div class="flower flower--1">
       <div class="flower__leafs flower__leafs--1">
+        <div class="flower__leaf flower__leaf--back-1"></div>
+        <div class="flower__leaf flower__leaf--back-2"></div>
+        <div class="flower__leaf flower__leaf--back-3"></div>
         <div class="flower__leaf flower__leaf--1"></div>
         <div class="flower__leaf flower__leaf--2"></div>
         <div class="flower__leaf flower__leaf--3"></div>
         <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
+        <div class="flower__leaf flower__leaf--5"></div>
+        <div class="flower__white-circle">
+          <span class="stamen stamen--1"></span>
+          <span class="stamen stamen--2"></span>
+          <span class="stamen stamen--3"></span>
+          <span class="stamen stamen--4"></span>
+          <span class="stamen stamen--5"></span>
+        </div>
 
         <div class="flower__light flower__light--1"></div>
         <div class="flower__light flower__light--2"></div>
@@ -37,13 +73,24 @@
       </div>
     </div>
 
+    <!-- Bông hoa 2: Nghiêng phải -->
     <div class="flower flower--2">
       <div class="flower__leafs flower__leafs--2">
+        <div class="flower__leaf flower__leaf--back-1"></div>
+        <div class="flower__leaf flower__leaf--back-2"></div>
+        <div class="flower__leaf flower__leaf--back-3"></div>
         <div class="flower__leaf flower__leaf--1"></div>
         <div class="flower__leaf flower__leaf--2"></div>
         <div class="flower__leaf flower__leaf--3"></div>
         <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
+        <div class="flower__leaf flower__leaf--5"></div>
+        <div class="flower__white-circle">
+          <span class="stamen stamen--1"></span>
+          <span class="stamen stamen--2"></span>
+          <span class="stamen stamen--3"></span>
+          <span class="stamen stamen--4"></span>
+          <span class="stamen stamen--5"></span>
+        </div>
 
         <div class="flower__light flower__light--1"></div>
         <div class="flower__light flower__light--2"></div>
@@ -62,13 +109,24 @@
       </div>
     </div>
 
+    <!-- Bông hoa 3: Nghiêng trái -->
     <div class="flower flower--3">
       <div class="flower__leafs flower__leafs--3">
+        <div class="flower__leaf flower__leaf--back-1"></div>
+        <div class="flower__leaf flower__leaf--back-2"></div>
+        <div class="flower__leaf flower__leaf--back-3"></div>
         <div class="flower__leaf flower__leaf--1"></div>
         <div class="flower__leaf flower__leaf--2"></div>
         <div class="flower__leaf flower__leaf--3"></div>
         <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
+        <div class="flower__leaf flower__leaf--5"></div>
+        <div class="flower__white-circle">
+          <span class="stamen stamen--1"></span>
+          <span class="stamen stamen--2"></span>
+          <span class="stamen stamen--3"></span>
+          <span class="stamen stamen--4"></span>
+          <span class="stamen stamen--5"></span>
+        </div>
 
         <div class="flower__light flower__light--1"></div>
         <div class="flower__light flower__light--2"></div>
@@ -85,6 +143,80 @@
         <div class="flower__line__leaf flower__line__leaf--3"></div>
         <div class="flower__line__leaf flower__line__leaf--4"></div>
       </div>
+    </div>
+
+    <!-- Bông hoa 4 (Mới): Nghiêng sâu bên trái, tầm trung -->
+    <div class="flower flower--4">
+      <div class="flower__leafs flower__leafs--4">
+        <div class="flower__leaf flower__leaf--back-1"></div>
+        <div class="flower__leaf flower__leaf--back-2"></div>
+        <div class="flower__leaf flower__leaf--back-3"></div>
+        <div class="flower__leaf flower__leaf--1"></div>
+        <div class="flower__leaf flower__leaf--2"></div>
+        <div class="flower__leaf flower__leaf--3"></div>
+        <div class="flower__leaf flower__leaf--4"></div>
+        <div class="flower__leaf flower__leaf--5"></div>
+        <div class="flower__white-circle">
+          <span class="stamen stamen--1"></span>
+          <span class="stamen stamen--2"></span>
+          <span class="stamen stamen--3"></span>
+        </div>
+
+        <div class="flower__light flower__light--1"></div>
+        <div class="flower__light flower__light--2"></div>
+        <div class="flower__light flower__light--3"></div>
+        <div class="flower__light flower__light--4"></div>
+        <div class="flower__light flower__light--5"></div>
+        <div class="flower__light flower__light--6"></div>
+      </div>
+      <div class="flower__line">
+        <div class="flower__line__leaf flower__line__leaf--1"></div>
+        <div class="flower__line__leaf flower__line__leaf--2"></div>
+        <div class="flower__line__leaf flower__line__leaf--3"></div>
+        <div class="flower__line__leaf flower__line__leaf--4"></div>
+      </div>
+    </div>
+
+    <!-- Bông hoa 5 (Mới): Nghiêng sâu bên phải, duyên dáng -->
+    <div class="flower flower--5">
+      <div class="flower__leafs flower__leafs--5">
+        <div class="flower__leaf flower__leaf--back-1"></div>
+        <div class="flower__leaf flower__leaf--back-2"></div>
+        <div class="flower__leaf flower__leaf--back-3"></div>
+        <div class="flower__leaf flower__leaf--1"></div>
+        <div class="flower__leaf flower__leaf--2"></div>
+        <div class="flower__leaf flower__leaf--3"></div>
+        <div class="flower__leaf flower__leaf--4"></div>
+        <div class="flower__leaf flower__leaf--5"></div>
+        <div class="flower__white-circle">
+          <span class="stamen stamen--1"></span>
+          <span class="stamen stamen--2"></span>
+          <span class="stamen stamen--3"></span>
+        </div>
+
+        <div class="flower__light flower__light--1"></div>
+        <div class="flower__light flower__light--2"></div>
+        <div class="flower__light flower__light--3"></div>
+        <div class="flower__light flower__light--4"></div>
+        <div class="flower__light flower__light--5"></div>
+        <div class="flower__light flower__light--6"></div>
+      </div>
+      <div class="flower__line">
+        <div class="flower__line__leaf flower__line__leaf--1"></div>
+        <div class="flower__line__leaf flower__line__leaf--2"></div>
+        <div class="flower__line__leaf flower__line__leaf--3"></div>
+        <div class="flower__line__leaf flower__line__leaf--4"></div>
+      </div>
+    </div>
+
+    <!-- Đôi bướm phát sáng bay lượn quanh hoa -->
+    <div class="butterfly butterfly--1">
+      <div class="butterfly__wing butterfly__wing--left"></div>
+      <div class="butterfly__wing butterfly__wing--right"></div>
+    </div>
+    <div class="butterfly butterfly--2">
+      <div class="butterfly__wing butterfly__wing--left"></div>
+      <div class="butterfly__wing butterfly__wing--right"></div>
     </div>
 
     <div class="grow-ans" style="--d:1.2s">
