@@ -3,33 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magical Blossoming Night</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>For You 🌸💗</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="not-loaded" data-theme="sakura">
-  <!-- Bầu trời đêm sao băng & đom đóm tương tác -->
+<body class="not-loaded">
+  <!-- Bầu trời đêm sao băng, tim hồng & đom đóm tương tác -->
   <canvas id="sky-canvas"></canvas>
 
-  <!-- Ánh cực quang & trăng khuyết -->
+  <!-- Ánh cực quang hồng phấn & trăng khuyết -->
   <div class="night">
     <div class="aurora aurora--1"></div>
     <div class="aurora aurora--2"></div>
     <div class="moon"></div>
   </div>
 
-  <!-- Sương mù phát sáng dưới mặt đất -->
+  <!-- Sương mù hồng phát sáng dưới mặt đất -->
   <div class="ground-mist"></div>
-
-  <!-- Thanh điều khiển tinh tế -->
-  <div class="controls" aria-label="Đổi màu hoa">
-    <div class="theme-dots" role="group" aria-label="Đổi màu hoa">
-      <button type="button" class="theme-dot active" data-theme-select="sakura" title="Hồng Anh Đào" style="--dot:#ff7eb3"></button>
-      <button type="button" class="theme-dot" data-theme-select="violet" title="Tím Ngân Hà" style="--dot:#c084fc"></button>
-      <button type="button" class="theme-dot" data-theme-select="moonlight" title="Xanh Ánh Trăng" style="--dot:#38bdf8"></button>
-      <button type="button" class="theme-dot" data-theme-select="golden" title="Vàng Ánh Sao" style="--dot:#fbbf24"></button>
-    </div>
-  </div>
 
   <div class="flowers">
     <!-- Bông hoa 1: Bông chính giữa cao nhất (8 cánh 2 tầng + nhị hoa phát sáng) -->
@@ -206,7 +196,7 @@
       </div>
     </div>
 
-    <!-- Đôi bướm phát sáng bay lượn quanh hoa -->
+    <!-- Đàn bướm hồng phát sáng bay lượn quanh hoa -->
     <div class="butterfly butterfly--1">
       <div class="butterfly__wing butterfly__wing--left"></div>
       <div class="butterfly__wing butterfly__wing--right"></div>
@@ -214,6 +204,20 @@
     <div class="butterfly butterfly--2">
       <div class="butterfly__wing butterfly__wing--left"></div>
       <div class="butterfly__wing butterfly__wing--right"></div>
+    </div>
+    <div class="butterfly butterfly--3">
+      <div class="butterfly__wing butterfly__wing--left"></div>
+      <div class="butterfly__wing butterfly__wing--right"></div>
+    </div>
+
+    <!-- Những trái tim hồng nhỏ bay lên từ khóm hoa -->
+    <div class="floating-hearts">
+      <span class="mini-heart mini-heart--1"></span>
+      <span class="mini-heart mini-heart--2"></span>
+      <span class="mini-heart mini-heart--3"></span>
+      <span class="mini-heart mini-heart--4"></span>
+      <span class="mini-heart mini-heart--5"></span>
+      <span class="mini-heart mini-heart--6"></span>
     </div>
 
     <div class="grow-ans" style="--d:1.2s">

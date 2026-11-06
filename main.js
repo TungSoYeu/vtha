@@ -4,19 +4,7 @@ window.addEventListener("load", () => {
     clearTimeout(startTimer);
   }, 800);
 
-  // Đổi chủ đề màu sắc của hoa
-  const themeButtons = document.querySelectorAll("[data-theme-select]");
-  themeButtons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const theme = btn.getAttribute("data-theme-select");
-      document.body.setAttribute("data-theme", theme);
-      themeButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
-
-  // Canvas bầu trời sao lấp lánh, sao băng & bụi sao tương tác (hỗ trợ màn hình Retina / Điện thoại)
+  // Canvas bầu trời sao hồng lấp lánh, sao băng & tim hồng tương tác
   const canvas = document.getElementById("sky-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -38,7 +26,7 @@ window.addEventListener("load", () => {
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
 
-  const starColors = ["#ffffff", "#ffe4e6", "#bae6fd", "#fef08a", "#e9d5ff"];
+  const pinkPalette = ["#ffffff", "#ffe5ec", "#ffb3c6", "#ff8fab", "#fef08a"];
   const starCount = isMobile ? 110 : 170;
   const stars = Array.from({ length: starCount }, () => ({
     x: Math.random() * width,
@@ -46,10 +34,10 @@ window.addEventListener("load", () => {
     r: Math.random() * 1.4 + 0.3,
     alpha: Math.random() * Math.PI * 2,
     speed: Math.random() * 0.02 + 0.006,
-    color: starColors[Math.floor(Math.random() * starColors.length)],
+    color: pinkPalette[Math.floor(Math.random() * pinkPalette.length)],
   }));
 
-  // Đom đóm lơ lửng quanh vườn hoa
+  // Đom đóm hồng & vàng ấm lơ lửng quanh vườn hoa
   const fireflyCount = isMobile ? 18 : 28;
   const fireflies = Array.from({ length: fireflyCount }, () => ({
     x: width * 0.15 + Math.random() * width * 0.7,
@@ -58,10 +46,10 @@ window.addEventListener("load", () => {
     vy: -Math.random() * 0.5 - 0.15,
     r: Math.random() * 2 + 1,
     phase: Math.random() * Math.PI * 2,
-    hue: Math.random() > 0.45 ? 48 : 180,
+    hue: Math.random() > 0.35 ? 340 : 48,
   }));
 
-  // Sao băng
+  // Sao băng hồng lãng mạn
   const meteors = [];
   function spawnMeteor() {
     if (meteors.length > 2) return;
@@ -79,30 +67,54 @@ window.addEventListener("load", () => {
     if (Math.random() < 0.65) spawnMeteor();
   }, 3400);
 
-  // Hạt bụi sao khi di chuột hoặc chạm tay trên điện thoại
+  // Vẽ hình trái tim nhỏ xinh trên canvas
+  function drawHeart(x, y, size, color, alpha, rotation = 0) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.scale(size, size);
+    ctx.globalAlpha = alpha;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = color;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(0, 0.3);
+    ctx.bezierCurveTo(-0.5, -0.3, -1, 0.2, 0, 0.9);
+    ctx.bezierCurveTo(1, 0.2, 0.5, -0.3, 0, 0.3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Hạt tim hồng & bụi sao khi chạm tay hoặc di chuột
   const sparkles = [];
-  function addSparkles(x, y, count = 3) {
+  const heartColors = ["#ff8fab", "#ffb3c6", "#fb6f92", "#ffc2d1", "#ffe5ec"];
+
+  function addSparkles(x, y, count = 3, withHearts = false) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
       const spd = Math.random() * 2 + 0.4;
+      const isHeart = withHearts ? Math.random() < 0.65 : Math.random() < 0.4;
       sparkles.push({
         x,
         y,
         vx: Math.cos(angle) * spd,
-        vy: Math.sin(angle) * spd - 0.35,
-        r: Math.random() * 2.2 + 0.8,
+        vy: Math.sin(angle) * spd - 0.55,
+        r: isHeart ? Math.random() * 6 + 6 : Math.random() * 2.2 + 0.8,
         alpha: 1,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
+        isHeart,
+        rot: (Math.random() - 0.5) * 0.5,
+        color: heartColors[Math.floor(Math.random() * heartColors.length)],
       });
     }
   }
 
   window.addEventListener("pointermove", (e) => {
-    if (Math.random() < 0.55) addSparkles(e.clientX, e.clientY, 2);
+    if (Math.random() < 0.55) addSparkles(e.clientX, e.clientY, 2, false);
   });
 
   window.addEventListener("pointerdown", (e) => {
-    addSparkles(e.clientX, e.clientY, 14);
+    addSparkles(e.clientX, e.clientY, 14, true);
   });
 
   function render() {
@@ -134,15 +146,15 @@ window.addEventListener("load", () => {
       ctx.save();
       ctx.globalAlpha = glow;
       ctx.shadowBlur = 10;
-      ctx.shadowColor = `hsl(${f.hue}, 100%, 70%)`;
-      ctx.fillStyle = `hsl(${f.hue}, 100%, 80%)`;
+      ctx.shadowColor = `hsl(${f.hue}, 100%, 75%)`;
+      ctx.fillStyle = `hsl(${f.hue}, 100%, 85%)`;
       ctx.beginPath();
       ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
-    // Vẽ sao băng
+    // Vẽ sao băng hồng
     for (let i = meteors.length - 1; i >= 0; i--) {
       const m = meteors[i];
       const dx = Math.cos(m.angle) * m.speed;
@@ -160,7 +172,7 @@ window.addEventListener("load", () => {
       const tailY = m.y - Math.sin(m.angle) * m.len;
       const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
       grad.addColorStop(0, `rgba(255, 255, 255, ${m.alpha})`);
-      grad.addColorStop(0.4, `rgba(244, 114, 182, ${m.alpha * 0.6})`);
+      grad.addColorStop(0.4, `rgba(255, 143, 171, ${m.alpha * 0.7})`);
       grad.addColorStop(1, "rgba(255, 255, 255, 0)");
 
       ctx.save();
@@ -174,25 +186,29 @@ window.addEventListener("load", () => {
       ctx.restore();
     }
 
-    // Vẽ hạt bụi sao tương tác
+    // Vẽ tim hồng & hạt bụi sao tương tác
     for (let i = sparkles.length - 1; i >= 0; i--) {
       const sp = sparkles[i];
       sp.x += sp.vx;
       sp.y += sp.vy;
-      sp.alpha -= 0.024;
+      sp.alpha -= 0.02;
       if (sp.alpha <= 0) {
         sparkles.splice(i, 1);
         continue;
       }
-      ctx.save();
-      ctx.globalAlpha = sp.alpha;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = sp.color;
-      ctx.fillStyle = sp.color;
-      ctx.beginPath();
-      ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+      if (sp.isHeart) {
+        drawHeart(sp.x, sp.y, sp.r, sp.color, sp.alpha, sp.rot);
+      } else {
+        ctx.save();
+        ctx.globalAlpha = sp.alpha;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = sp.color;
+        ctx.fillStyle = sp.color;
+        ctx.beginPath();
+        ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
     }
 
     ctx.globalAlpha = 1;

@@ -7,56 +7,20 @@
 }
 
 :root {
-  --dark-color: #03030a;
-  /* Theme: Sakura Aurora (Default) */
-  --petal-core: #be185d;
-  --petal-mid: #f43f5e;
-  --petal-tip: #fbcfe8;
-  --petal-back: #9d174d;
-  --petal-glow: #ff7eb3;
-  --petal-alt-mid: #ec4899;
-  --petal-alt-tip: #ddd6fe;
+  --dark-color: #05020a;
+  /* Tone Hồng Pastel Ngọt Ngào */
+  --petal-core: #ec4899;
+  --petal-mid: #ff85a2;
+  --petal-tip: #ffe5ec;
+  --petal-back: #db2777;
+  --petal-glow: #ff8fab;
+  --petal-alt-mid: #ff9ebb;
+  --petal-alt-tip: #fff0f3;
   --stem-dark: #0d6e78;
   --stem-bright: #38ef7d;
   --leaf-cyan: #22d3ee;
-  --aurora-1: rgba(244, 114, 182, 0.16);
-  --aurora-2: rgba(56, 189, 248, 0.14);
-}
-
-body[data-theme="violet"] {
-  --petal-core: #581c87;
-  --petal-mid: #a855f7;
-  --petal-tip: #f5d0fe;
-  --petal-back: #4c1d95;
-  --petal-glow: #c084fc;
-  --petal-alt-mid: #8b5cf6;
-  --petal-alt-tip: #bae6fd;
-  --aurora-1: rgba(168, 85, 247, 0.2);
-  --aurora-2: rgba(236, 72, 153, 0.15);
-}
-
-body[data-theme="moonlight"] {
-  --petal-core: #0369a1;
-  --petal-mid: #38bdf8;
-  --petal-tip: #e0f2fe;
-  --petal-back: #1e40af;
-  --petal-glow: #67e8f9;
-  --petal-alt-mid: #2dd4bf;
-  --petal-alt-tip: #f0fdfa;
-  --aurora-1: rgba(56, 189, 248, 0.2);
-  --aurora-2: rgba(45, 212, 191, 0.16);
-}
-
-body[data-theme="golden"] {
-  --petal-core: #b45309;
-  --petal-mid: #f59e0b;
-  --petal-tip: #fef3c7;
-  --petal-back: #92400e;
-  --petal-glow: #fde047;
-  --petal-alt-mid: #fb7185;
-  --petal-alt-tip: #fde68a;
-  --aurora-1: rgba(251, 191, 36, 0.18);
-  --aurora-2: rgba(244, 63, 94, 0.14);
+  --aurora-1: rgba(255, 143, 171, 0.22);
+  --aurora-2: rgba(244, 114, 182, 0.16);
 }
 
 body {
@@ -721,8 +685,8 @@ body {
 }
 
 .flower__light:nth-child(odd) {
-  background-color: #67e8f9;
-  box-shadow: 0 0 1.2vmin #22d3ee, 0 0 2.4vmin var(--petal-glow);
+  background-color: #ffb3c6;
+  box-shadow: 0 0 1.2vmin #ff8fab, 0 0 2.4vmin var(--petal-glow);
 }
 
 .flower__light--1 {
@@ -783,6 +747,110 @@ body {
   animation:
     butterfly-appear 1.5s 3.8s backwards,
     butterfly-flight-2 11s 3.8s ease-in-out infinite;
+}
+
+.butterfly--3 {
+  bottom: 48vmin;
+  left: -14vmin;
+  transform: scale(0.62);
+  animation:
+    butterfly-appear 1.5s 4.2s backwards,
+    butterfly-flight-1 10s 4.2s ease-in-out infinite reverse;
+}
+
+/* Những trái tim hồng nhỏ bay lên từ khóm hoa */
+.floating-hearts {
+  position: absolute;
+  bottom: 35vmin;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.mini-heart {
+  position: absolute;
+  width: 1.6vmin;
+  height: 1.6vmin;
+  background-color: #ff8fab;
+  transform: rotate(-45deg);
+  filter: drop-shadow(0 0 0.8vmin #ff7eb3);
+  opacity: 0;
+  animation: float-heart 5.5s ease-in-out infinite backwards;
+}
+
+.mini-heart::before,
+.mini-heart::after {
+  content: "";
+  position: absolute;
+  width: 1.6vmin;
+  height: 1.6vmin;
+  background-color: inherit;
+  border-radius: 50%;
+}
+
+.mini-heart::before {
+  top: -0.8vmin;
+  left: 0;
+}
+
+.mini-heart::after {
+  top: 0;
+  left: 0.8vmin;
+}
+
+.mini-heart--1 {
+  left: -14vmin;
+  bottom: 10vmin;
+  animation-delay: 2.6s;
+}
+.mini-heart--2 {
+  left: 12vmin;
+  bottom: 16vmin;
+  background-color: #ffb3c6;
+  animation-delay: 3.4s;
+}
+.mini-heart--3 {
+  left: -4vmin;
+  bottom: 28vmin;
+  background-color: #fb6f92;
+  animation-delay: 4.1s;
+}
+.mini-heart--4 {
+  left: 18vmin;
+  bottom: 6vmin;
+  animation-delay: 4.9s;
+}
+.mini-heart--5 {
+  left: -20vmin;
+  bottom: 18vmin;
+  background-color: #ffc2d1;
+  animation-delay: 5.6s;
+}
+.mini-heart--6 {
+  left: 5vmin;
+  bottom: 24vmin;
+  animation-delay: 6.2s;
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(-45deg) scale(0.4);
+  }
+  25% {
+    opacity: 0.9;
+    transform: translateY(-8vmin) translateX(-2vmin) rotate(-38deg) scale(0.95);
+  }
+  60% {
+    opacity: 0.85;
+    transform: translateY(-20vmin) translateX(2.5vmin) rotate(-52deg) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-34vmin) translateX(-1.5vmin) rotate(-45deg) scale(0.5);
+  }
 }
 
 .butterfly__wing {
