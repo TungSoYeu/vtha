@@ -90,7 +90,7 @@ body {
   }
 }
 
-/* Trăng khuyết phát sáng */
+/* Trăng khuyết phát sáng (bấm vào để mở lời nhắn) */
 .moon {
   position: absolute;
   top: 7vmin;
@@ -103,6 +103,9 @@ body {
           drop-shadow(0 0 6vmin rgba(254, 240, 138, 0.35));
   transform: rotate(-18deg);
   opacity: 0.92;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 40;
   animation: moon-pulse 6s ease-in-out infinite alternate;
 }
 
@@ -150,69 +153,264 @@ body {
   }
 }
 
-/* Thanh điều khiển nổi tinh tế */
-.controls {
+/* Màn chào mở đầu dễ thương để bật nhạc & kích hoạt hoa nở */
+.intro-overlay {
   position: fixed;
-  top: 2.2vmin;
-  left: 2.5vmin;
-  z-index: 200;
+  inset: 0;
+  z-index: 500;
   display: flex;
   align-items: center;
-  gap: 1.2vmin;
-  padding: 0.8vmin 1.4vmin;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.45);
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(circle at center, rgba(20, 8, 28, 0.78), rgba(5, 2, 10, 0.94));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  opacity: 0.55;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
 }
 
-.controls:hover {
-  opacity: 1;
-  transform: translateY(1px);
+.intro-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.ctrl-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 0.55vmin 1.3vmin;
+.intro-card {
+  max-width: 340px;
+  width: 100%;
+  padding: 28px 24px;
+  border-radius: 28px;
+  text-align: center;
+  background: linear-gradient(145deg, rgba(255, 182, 193, 0.16), rgba(255, 105, 180, 0.07));
+  border: 1px solid rgba(255, 192, 203, 0.32);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    0 0 35px rgba(255, 143, 171, 0.22);
+  font-family: "Quicksand", system-ui, sans-serif;
+  animation: card-float 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes card-float {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-6px);
+  }
+}
+
+.intro-badge {
+  display: inline-block;
+  padding: 4px 12px;
   border-radius: 999px;
-  font-size: clamp(11px, 1.3vmin, 14px);
-  font-weight: 500;
+  background: rgba(255, 143, 171, 0.2);
+  border: 1px solid rgba(255, 179, 198, 0.35);
+  color: #ffc2d1;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin-bottom: 12px;
+}
+
+.intro-heart-icon {
+  font-size: 40px;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 0 12px rgba(255, 143, 171, 0.8));
+  animation: heart-beat 1.4s ease-in-out infinite;
+}
+
+@keyframes heart-beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.16);
+  }
+}
+
+.intro-title {
+  font-family: "Dancing Script", cursive;
+  font-size: 36px;
+  color: #ffe5ec;
+  text-shadow: 0 0 16px rgba(255, 143, 171, 0.85);
+  margin-bottom: 8px;
+}
+
+.intro-desc {
+  color: #fbcfe8;
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  opacity: 0.92;
+}
+
+.intro-btn {
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ff7eb3 0%, #fb6f92 100%);
+  color: #fff;
+  font-family: "Quicksand", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
+  box-shadow: 0 6px 22px rgba(251, 111, 146, 0.55);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ctrl-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+.intro-btn:hover,
+.intro-btn:active {
+  transform: scale(1.04);
+  box-shadow: 0 8px 28px rgba(255, 143, 171, 0.8);
 }
 
-.theme-dots {
+/* Lời chúc ngủ ngon hiện lên trên bầu trời sao khi hoa nở */
+.goodnight-message {
+  position: fixed;
+  top: 9vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92vw;
+  max-width: 560px;
+  text-align: center;
+  z-index: 35;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.8s ease, transform 1.8s ease;
+}
+
+.goodnight-message.show {
+  opacity: 1;
+  animation: message-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes message-glow {
+  0% {
+    transform: translateX(-50%) translateY(0px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+.gn-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(28px, 6.2vmin, 46px);
+  font-weight: 700;
+  color: #ffe5ec;
+  text-shadow:
+    0 0 12px rgba(255, 143, 171, 0.9),
+    0 0 28px rgba(251, 111, 146, 0.55);
+  margin-bottom: 6px;
+}
+
+.gn-subtitle {
+  font-family: "Quicksand", system-ui, sans-serif;
+  font-size: clamp(13px, 2.5vmin, 17px);
+  font-weight: 600;
+  color: #ffc2d1;
+  text-shadow: 0 0 10px rgba(255, 143, 171, 0.6);
+  opacity: 0.92;
+}
+
+/* Thiệp nhỏ khi chạm vào Mặt Trăng */
+.moon-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
   display: flex;
   align-items: center;
-  gap: 0.8vmin;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(8, 3, 15, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 
-.theme-dot {
-  width: clamp(14px, 2vmin, 20px);
-  height: clamp(14px, 2vmin, 20px);
+.moon-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.moon-modal__card {
+  position: relative;
+  max-width: 340px;
+  width: 100%;
+  padding: 26px 22px;
+  border-radius: 24px;
+  text-align: center;
+  background: linear-gradient(145deg, rgba(40, 15, 45, 0.92), rgba(20, 8, 28, 0.95));
+  border: 1px solid rgba(255, 182, 193, 0.38);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 143, 171, 0.3);
+  font-family: "Quicksand", system-ui, sans-serif;
+  color: #ffe5ec;
+}
+
+.moon-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: var(--dot);
-  border: 2px solid rgba(255, 255, 255, 0.35);
+  border: none;
+  background: rgba(255, 192, 203, 0.15);
+  color: #ffc2d1;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.theme-dot:hover,
-.theme-dot.active {
-  transform: scale(1.2);
-  border-color: #fff;
-  box-shadow: 0 0 10px var(--dot);
+.moon-modal__icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.moon-modal__heading {
+  font-family: "Dancing Script", cursive;
+  font-size: 28px;
+  color: #ffb3c6;
+  margin-bottom: 10px;
+}
+
+.moon-modal__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #fce7f3;
+}
+
+/* Chữ lời chúc nhỏ bay lên khi chạm màn hình (Star Whispers) */
+.whisper-bubble {
+  position: fixed;
+  z-index: 150;
+  pointer-events: none;
+  font-family: "Quicksand", system-ui, sans-serif;
+  font-size: clamp(12px, 2.6vmin, 15px);
+  font-weight: 700;
+  color: #ffe5ec;
+  text-shadow: 0 0 10px rgba(255, 143, 171, 0.95);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  animation: whisper-float 2.2s ease-out forwards;
+}
+
+@keyframes whisper-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -14px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -55px) scale(0.95);
+  }
 }
 
 .flowers {

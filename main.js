@@ -1,8 +1,149 @@
 window.addEventListener("load", () => {
-  const startTimer = setTimeout(() => {
-    document.body.classList.remove("not-loaded");
-    clearTimeout(startTimer);
-  }, 800);
+  const introOverlay = document.getElementById("intro-overlay");
+  const startBtn = document.getElementById("start-btn");
+  const bgMusic = document.getElementById("bg-music");
+  const goodnightMsg = document.getElementById("goodnight-message");
+  const moonTrigger = document.getElementById("moon-trigger");
+  const moonModal = document.getElementById("moon-modal");
+  const closeModal = document.getElementById("close-modal");
+
+  let started = false;
+
+  // Hộp nhạc (Music Box) nhẹ nhàng dự phòng nếu chưa có file music.mp3
+  function playFallbackMusicBox() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const actx = new AudioCtx();
+    // Giai điệu ru ngủ êm dịu (Twinkle / Lullaby chime)
+    const notes = [
+      523.25, 659.25, 783.99, 987.77, 880.0, 783.99, 659.25, 587.33,
+      523.25, 659.25, 783.99, 1046.5, 987.77, 783.99, 698.46, 659.25,
+    ];
+    let idx = 0;
+
+    function playChime() {
+      if (actx.state === "suspended") actx.resume();
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(notes[idx % notes.length], actx.currentTime);
+
+      gain.gain.setValueAtTime(0.001, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.06, actx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0008, actx.currentTime + 1.8);
+
+      osc.connect(gain);
+      gain.connect(actx.destination);
+      osc.start();
+      osc.stop(actx.currentTime + 1.85);
+      idx++;
+    }
+
+    playChime();
+    setInterval(playChime, 950);
+  }
+
+  function startExperience() {
+    if (started) return;
+    started = true;
+
+    if (introOverlay) {
+      introOverlay.classList.add("hidden");
+    }
+
+    // Phát nhạc ngay khi hoa bắt đầu mọc lên
+    if (bgMusic) {
+      bgMusic.volume = 0.75;
+      const playPromise = bgMusic.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          playFallbackMusicBox();
+        });
+      }
+      bgMusic.addEventListener("error", () => {
+        playFallbackMusicBox();
+      }, { once: true });
+    } else {
+      playFallbackMusicBox();
+    }
+
+    // Kích hoạt hoa chồi lên từ mặt đất
+    setTimeout(() => {
+      document.body.classList.remove("not-loaded");
+    }, 200);
+
+    // Hiện dòng chữ chúc Võ Thúy Hà ngủ ngon khi hoa vừa bung nở
+    setTimeout(() => {
+      if (goodnightMsg) {
+        goodnightMsg.classList.add("show");
+      }
+    }, 3400);
+  }
+
+  if (startBtn) {
+    startBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addSparkles(window.innerWidth / 2, window.innerHeight / 2, 24, true);
+      startExperience();
+    });
+  }
+
+  if (introOverlay) {
+    introOverlay.addEventListener("click", () => {
+      addSparkles(window.innerWidth / 2, window.innerHeight / 2, 24, true);
+      startExperience();
+    });
+  }
+
+  // Mở / đóng thiệp khi chạm vào Mặt Trăng
+  if (moonTrigger && moonModal) {
+    moonTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      moonModal.classList.add("open");
+      moonModal.setAttribute("aria-hidden", "false");
+    });
+  }
+
+  if (closeModal && moonModal) {
+    closeModal.addEventListener("click", (e) => {
+      e.stopPropagation();
+      moonModal.classList.remove("open");
+      moonModal.setAttribute("aria-hidden", "true");
+    });
+    moonModal.addEventListener("click", (e) => {
+      if (e.target === moonModal) {
+        moonModal.classList.remove("open");
+        moonModal.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
+
+  // Các câu chúc nhỏ dễ thương bay lên khi chạm màn hình
+  const whispers = [
+    "Ngủ ngoan nhé Hà ơi ✨",
+    "Mơ thật đẹp nha công chúa 💗",
+    "Goodnight Võ Thúy Hà 🌙",
+    "Đắp chăn ấm kẻo lạnh nha 🌸",
+    "Mai lại là một ngày thật vui nhé 💕",
+    "Gác lại âu lo và ngủ thật sâu nha 🌷",
+    "Chúc Hà một đêm bình yên 💫",
+  ];
+  let whisperIdx = 0;
+
+  function spawnWhisper(x, y) {
+    const el = document.createElement("div");
+    el.className = "whisper-bubble";
+    el.textContent = whispers[whisperIdx % whispers.length];
+    whisperIdx++;
+    const clampedX = Math.max(90, Math.min(window.innerWidth - 90, x));
+    const clampedY = Math.max(60, Math.min(window.innerHeight - 60, y));
+    el.style.left = `${clampedX}px`;
+    el.style.top = `${clampedY}px`;
+    document.body.appendChild(el);
+    setTimeout(() => {
+      el.remove();
+    }, 2200);
+  }
 
   // Canvas bầu trời sao hồng lấp lánh, sao băng & tim hồng tương tác
   const canvas = document.getElementById("sky-canvas");
@@ -115,6 +256,9 @@ window.addEventListener("load", () => {
 
   window.addEventListener("pointerdown", (e) => {
     addSparkles(e.clientX, e.clientY, 14, true);
+    if (started && (!moonModal || !moonModal.classList.contains("open"))) {
+      spawnWhisper(e.clientX, e.clientY);
+    }
   });
 
   function render() {
