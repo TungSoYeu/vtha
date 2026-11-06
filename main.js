@@ -9,38 +9,12 @@ window.addEventListener("load", () => {
 
   let started = false;
 
-  // Hộp nhạc (Music Box) nhẹ nhàng dự phòng nếu chưa có file music.mp3
-  function playFallbackMusicBox() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const actx = new AudioCtx();
-    // Giai điệu ru ngủ êm dịu (Twinkle / Lullaby chime)
-    const notes = [
-      523.25, 659.25, 783.99, 987.77, 880.0, 783.99, 659.25, 587.33,
-      523.25, 659.25, 783.99, 1046.5, 987.77, 783.99, 698.46, 659.25,
-    ];
-    let idx = 0;
-
-    function playChime() {
-      if (actx.state === "suspended") actx.resume();
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(notes[idx % notes.length], actx.currentTime);
-
-      gain.gain.setValueAtTime(0.001, actx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.06, actx.currentTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0008, actx.currentTime + 1.8);
-
-      osc.connect(gain);
-      gain.connect(actx.destination);
-      osc.start();
-      osc.stop(actx.currentTime + 1.85);
-      idx++;
+  function playMusic() {
+    if (!bgMusic) return;
+    bgMusic.volume = 0.85;
+    if (bgMusic.paused) {
+      bgMusic.play().catch(() => {});
     }
-
-    playChime();
-    setInterval(playChime, 950);
   }
 
   function startExperience() {
@@ -52,20 +26,7 @@ window.addEventListener("load", () => {
     }
 
     // Phát nhạc ngay khi hoa bắt đầu mọc lên
-    if (bgMusic) {
-      bgMusic.volume = 0.75;
-      const playPromise = bgMusic.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          playFallbackMusicBox();
-        });
-      }
-      bgMusic.addEventListener("error", () => {
-        playFallbackMusicBox();
-      }, { once: true });
-    } else {
-      playFallbackMusicBox();
-    }
+    playMusic();
 
     // Kích hoạt hoa chồi lên từ mặt đất
     setTimeout(() => {
