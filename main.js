@@ -4,6 +4,18 @@ window.addEventListener("load", () => {
     clearTimeout(startTimer);
   }, 800);
 
+  // Đổi chủ đề màu sắc của hoa
+  const themeButtons = document.querySelectorAll("[data-theme-select]");
+  themeButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const theme = btn.getAttribute("data-theme-select");
+      document.body.setAttribute("data-theme", theme);
+      themeButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
   // Canvas bầu trời sao lấp lánh, sao băng & bụi sao tương tác (hỗ trợ màn hình Retina / Điện thoại)
   const canvas = document.getElementById("sky-canvas");
   if (!canvas) return;

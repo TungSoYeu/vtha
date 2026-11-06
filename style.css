@@ -8,39 +8,66 @@
 
 :root {
   --dark-color: #03030a;
-  --petal-deep: #881337;
+  /* Theme: Sakura Aurora (Default) */
   --petal-core: #be185d;
   --petal-mid: #f43f5e;
-  --petal-soft: #fda4af;
-  --petal-tip: #fff1f2;
-  --petal-glow: #fb7185;
+  --petal-tip: #fbcfe8;
+  --petal-back: #9d174d;
+  --petal-glow: #ff7eb3;
   --petal-alt-mid: #ec4899;
-  --petal-alt-soft: #f9a8d4;
-  --stem-dark: #064e3b;
-  --stem-mid: #0d9488;
-  --stem-bright: #34d399;
-  --leaf-cyan: #14b8a6;
-  --aurora-1: rgba(244, 114, 182, 0.14);
-  --aurora-2: rgba(45, 212, 191, 0.12);
+  --petal-alt-tip: #ddd6fe;
+  --stem-dark: #0d6e78;
+  --stem-bright: #38ef7d;
+  --leaf-cyan: #22d3ee;
+  --aurora-1: rgba(244, 114, 182, 0.16);
+  --aurora-2: rgba(56, 189, 248, 0.14);
 }
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  height: 100dvh;
-  min-height: 100dvh;
-  overflow: hidden;
-  background-color: var(--dark-color);
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+body[data-theme="violet"] {
+  --petal-core: #581c87;
+  --petal-mid: #a855f7;
+  --petal-tip: #f5d0fe;
+  --petal-back: #4c1d95;
+  --petal-glow: #c084fc;
+  --petal-alt-mid: #8b5cf6;
+  --petal-alt-tip: #bae6fd;
+  --aurora-1: rgba(168, 85, 247, 0.2);
+  --aurora-2: rgba(236, 72, 153, 0.15);
+}
+
+body[data-theme="moonlight"] {
+  --petal-core: #0369a1;
+  --petal-mid: #38bdf8;
+  --petal-tip: #e0f2fe;
+  --petal-back: #1e40af;
+  --petal-glow: #67e8f9;
+  --petal-alt-mid: #2dd4bf;
+  --petal-alt-tip: #f0fdfa;
+  --aurora-1: rgba(56, 189, 248, 0.2);
+  --aurora-2: rgba(45, 212, 191, 0.16);
+}
+
+body[data-theme="golden"] {
+  --petal-core: #b45309;
+  --petal-mid: #f59e0b;
+  --petal-tip: #fef3c7;
+  --petal-back: #92400e;
+  --petal-glow: #fde047;
+  --petal-alt-mid: #fb7185;
+  --petal-alt-tip: #fde68a;
+  --aurora-1: rgba(251, 191, 36, 0.18);
+  --aurora-2: rgba(244, 63, 94, 0.14);
 }
 
 body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  perspective: 1200px;
+  min-height: 100vh;
+  background-color: var(--dark-color);
+  overflow: hidden;
+  perspective: 1000px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   user-select: none;
 }
 
@@ -63,10 +90,10 @@ body {
   z-index: 0;
   background:
     radial-gradient(ellipse at 50% 0%, #0f172a 0%, #050510 55%, #020206 100%),
-    radial-gradient(ellipse at 50% 100%, rgba(20, 184, 166, 0.12), transparent 60%);
+    radial-gradient(ellipse at 50% 100%, rgba(34, 211, 238, 0.12), transparent 60%);
 }
 
-/* Cực quang nhẹ trên bầu trời đêm */
+/* Cực quang huyền ảo trên bầu trời đêm */
 .aurora {
   position: absolute;
   width: 120vw;
@@ -74,9 +101,10 @@ body {
   left: -10vw;
   top: -8vh;
   filter: blur(7vmin);
-  opacity: 0.8;
+  opacity: 0.85;
   pointer-events: none;
   mix-blend-mode: screen;
+  transition: background 0.8s ease;
 }
 
 .aurora--1 {
@@ -101,15 +129,14 @@ body {
 /* Trăng khuyết phát sáng */
 .moon {
   position: absolute;
-  top: 7vh;
-  right: 9vw;
-  width: clamp(44px, 9vmin, 88px);
-  height: clamp(44px, 9vmin, 88px);
+  top: 7vmin;
+  right: 11vmin;
+  width: 10vmin;
+  height: 10vmin;
   border-radius: 50%;
-  box-shadow: -1.8vmin 1vmin 0 0 #fef9c3;
-  filter:
-    drop-shadow(0 0 2vmin rgba(254, 240, 138, 0.7))
-    drop-shadow(0 0 5vmin rgba(254, 240, 138, 0.35));
+  box-shadow: -2.2vmin 1.2vmin 0 0 #fef9c3;
+  filter: drop-shadow(0 0 2.5vmin rgba(254, 240, 138, 0.7))
+          drop-shadow(0 0 6vmin rgba(254, 240, 138, 0.35));
   transform: rotate(-18deg);
   opacity: 0.92;
   animation: moon-pulse 6s ease-in-out infinite alternate;
@@ -118,24 +145,27 @@ body {
 @keyframes moon-pulse {
   0% {
     transform: rotate(-18deg) scale(0.98);
+    filter: drop-shadow(0 0 2vmin rgba(254, 240, 138, 0.65))
+            drop-shadow(0 0 5vmin rgba(254, 240, 138, 0.3));
   }
   100% {
     transform: rotate(-16deg) scale(1.03);
+    filter: drop-shadow(0 0 3vmin rgba(254, 240, 138, 0.85))
+            drop-shadow(0 0 8vmin rgba(254, 240, 138, 0.45));
   }
 }
 
-/* Sương mù phát sáng dưới mặt đất */
+/* Sương mù phát sáng dưới chân hoa */
 .ground-mist {
   position: fixed;
   bottom: -4vmin;
   left: 50%;
   transform: translateX(-50%);
-  width: 95vw;
-  max-width: 95vmin;
+  width: 90vmin;
   height: 22vmin;
   background: radial-gradient(
     ellipse at center,
-    rgba(20, 184, 166, 0.18) 0%,
+    rgba(34, 211, 238, 0.18) 0%,
     rgba(244, 114, 182, 0.08) 45%,
     transparent 75%
   );
@@ -147,19 +177,83 @@ body {
 
 @keyframes mist-breathe {
   0% {
-    opacity: 0.55;
+    opacity: 0.6;
     transform: translateX(-50%) scaleX(0.95);
   }
   100% {
-    opacity: 0.95;
+    opacity: 1;
     transform: translateX(-50%) scaleX(1.08);
   }
 }
 
+/* Thanh điều khiển nổi tinh tế */
+.controls {
+  position: fixed;
+  top: 2.2vmin;
+  left: 2.5vmin;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 1.2vmin;
+  padding: 0.8vmin 1.4vmin;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  opacity: 0.55;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.controls:hover {
+  opacity: 1;
+  transform: translateY(1px);
+}
+
+.ctrl-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.55vmin 1.3vmin;
+  border-radius: 999px;
+  font-size: clamp(11px, 1.3vmin, 14px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+.theme-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.8vmin;
+}
+
+.theme-dot {
+  width: clamp(14px, 2vmin, 20px);
+  height: clamp(14px, 2vmin, 20px);
+  border-radius: 50%;
+  background: var(--dot);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-dot:hover,
+.theme-dot.active {
+  transform: scale(1.2);
+  border-color: #fff;
+  box-shadow: 0 0 10px var(--dot);
+}
+
 .flowers {
   position: relative;
-  transform: scale(0.9);
-  transform-origin: bottom center;
+  transform: scale(0.88);
   z-index: 5;
 }
 
@@ -178,7 +272,7 @@ body {
 }
 
 .flower--1 .flower__line {
-  height: 70vmin;
+  height: 72vmin;
   animation-delay: 0.3s;
 }
 
@@ -215,7 +309,7 @@ body {
 }
 
 .flower--2 .flower__line {
-  height: 60vmin;
+  height: 62vmin;
   animation-delay: 0.6s;
 }
 
@@ -244,7 +338,7 @@ body {
 }
 
 .flower--3 .flower__line {
-  height: 56vmin;
+  height: 58vmin;
   animation-delay: 0.9s;
 }
 
@@ -264,17 +358,17 @@ body {
   animation: blooming-leaf-left var(--fl-speed) 1.9s backwards;
 }
 
-/* Bông 4: Nghiêng sâu bên trái */
+/* Bông 4 (Mới): Nghiêng sâu bên trái */
 .flower--4 {
   left: 50%;
   bottom: 9vmin;
-  transform: rotate(-32deg) scale(0.82);
+  transform: rotate(-33deg) scale(0.84);
   animation: moving-flower-4 4.6s ease-in-out infinite;
   z-index: 11;
 }
 
 .flower--4 .flower__line {
-  height: 48vmin;
+  height: 50vmin;
   animation-delay: 1.2s;
 }
 
@@ -294,17 +388,17 @@ body {
   animation: blooming-leaf-left var(--fl-speed) 2.2s backwards;
 }
 
-/* Bông 5: Nghiêng sâu bên phải */
+/* Bông 5 (Mới): Nghiêng sâu bên phải */
 .flower--5 {
   left: 50%;
   bottom: 9vmin;
-  transform: rotate(33deg) scale(0.8);
+  transform: rotate(34deg) scale(0.82);
   animation: moving-flower-5 4.8s ease-in-out infinite;
   z-index: 11;
 }
 
 .flower--5 .flower__line {
-  height: 46vmin;
+  height: 48vmin;
   animation-delay: 1.4s;
 }
 
@@ -324,7 +418,7 @@ body {
   animation: blooming-leaf-left var(--fl-speed) 2.4s backwards;
 }
 
-/* Cụm đài và cánh hoa */
+/* Cụm cánh hoa nở */
 .flower__leafs {
   position: relative;
   animation: blooming-flower 2.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -356,265 +450,150 @@ body {
   left: 0;
   top: 0;
   transform: translate(-50%, -100%);
-  width: 12vmin;
-  height: 12vmin;
+  width: 11vmin;
+  height: 11vmin;
   background-color: var(--petal-glow);
   filter: blur(8vmin);
-  opacity: 0.75;
+  opacity: 0.85;
+  transition: background-color 0.6s ease;
 }
 
-/* Đài hoa (Sepals) xanh ngọc ôm dưới gốc bông hoa cho thật hơn */
-.flower__sepal {
-  position: absolute;
-  bottom: -0.8vmin;
-  left: 50%;
-  width: 3.2vmin;
-  height: 5.5vmin;
-  transform-origin: bottom center;
-  border-radius: 50% 50% 35% 35% / 80% 80% 20% 20%;
-  background: linear-gradient(to top, #042f2e 0%, #0d9488 60%, #5eead4 100%);
-  box-shadow: inset 0 0 0.8vmin rgba(255, 255, 255, 0.3);
-  z-index: 4;
-}
-
-.flower__sepal--1 {
-  transform: translate(-50%, 10%) rotate(-58deg) scaleY(0.85);
-}
-
-.flower__sepal--2 {
-  transform: translate(-50%, 16%) rotate(0deg) scale(0.9);
-  z-index: 5;
-}
-
-.flower__sepal--3 {
-  transform: translate(-50%, 10%) rotate(58deg) scaleY(0.85);
-}
-
-/* Cánh hoa thật & chi tiết: Có dáng cánh hoa nhọn nhẹ ở đỉnh, gân cánh hoa và đổ bóng sâu ở cuống */
+/* Cánh hoa đa tầng 3D chuyển sắc phát sáng */
 .flower__leaf {
   position: absolute;
   bottom: 0;
   left: 50%;
-  width: 8.2vmin;
-  height: 12.6vmin;
-  /* Tạo hình dáng cánh hoa sen/mộc lan tự nhiên, đầu cánh hơi nhọn mềm */
-  border-radius: 50% 50% 42% 42% / 65% 65% 35% 35%;
+  width: 8.5vmin;
+  height: 12vmin;
+  border-radius: 52% 48% 46% 54% / 40% 42% 58% 70%;
   background-color: var(--petal-mid);
-  background-image:
-    /* Sống giữa cánh hoa bắt sáng */
-    linear-gradient(
-      90deg,
-      transparent 44%,
-      rgba(255, 255, 255, 0.32) 50%,
-      transparent 56%
-    ),
-    /* Đổ bóng thẫm tự nhiên ở gốc cánh hoa */
-    radial-gradient(
-      ellipse at 50% 96%,
-      rgba(136, 19, 55, 0.85) 0%,
-      rgba(190, 24, 93, 0.45) 38%,
-      transparent 70%
-    ),
-    /* Sắc chuyển từ hồng đậm ở gốc lên hồng phấn và trắng ngọc ở đầu cánh */
-    linear-gradient(
-      to top,
-      var(--petal-deep) 0%,
-      var(--petal-core) 22%,
-      var(--petal-mid) 56%,
-      var(--petal-soft) 84%,
-      var(--petal-tip) 100%
-    );
+  background-image: linear-gradient(
+    to top,
+    var(--petal-core) 0%,
+    var(--petal-mid) 52%,
+    var(--petal-tip) 100%
+  );
   transform-origin: bottom center;
-  opacity: 0.96;
+  opacity: 0.94;
   box-shadow:
-    inset 0 0.8vmin 1.8vmin rgba(255, 255, 255, 0.82),
-    inset 0 -1.5vmin 2vmin rgba(136, 19, 55, 0.5),
-    0 0.4vmin 1.5vmin rgba(0, 0, 0, 0.35);
+    inset 0 0 2.2vmin rgba(255, 255, 255, 0.65),
+    0 0 1.8vmin rgba(255, 182, 193, 0.25);
+  transition: background-image 0.6s ease, background-color 0.6s ease;
 }
 
-/* Vân gân cánh hoa (Petal Veins) mịn bên trong mỗi cánh */
-.flower__leaf::before {
-  content: "";
-  position: absolute;
-  inset: 6% 12% 10% 12%;
-  border-radius: inherit;
-  background-image:
-    repeating-linear-gradient(
-      -22deg,
-      transparent 0px,
-      transparent 5px,
-      rgba(255, 255, 255, 0.11) 5.5px,
-      transparent 6.5px
-    ),
-    repeating-linear-gradient(
-      22deg,
-      transparent 0px,
-      transparent 5px,
-      rgba(255, 255, 255, 0.11) 5.5px,
-      transparent 6.5px
-    );
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* Phối sắc thái nhẹ cho bông số 2 & 4 để khóm hoa tự nhiên như thật */
+/* Phối sắc thái nhẹ cho các bông bên cạnh để tự nhiên và có chiều sâu hơn */
 .flower--2 .flower__leaf,
 .flower--4 .flower__leaf {
-  background-image:
-    linear-gradient(
-      90deg,
-      transparent 44%,
-      rgba(255, 255, 255, 0.32) 50%,
-      transparent 56%
-    ),
-    radial-gradient(
-      ellipse at 50% 96%,
-      rgba(131, 24, 67, 0.85) 0%,
-      transparent 68%
-    ),
-    linear-gradient(
-      to top,
-      #831843 0%,
-      #be185d 22%,
-      var(--petal-alt-mid) 56%,
-      var(--petal-alt-soft) 84%,
-      #fff5f7 100%
-    );
+  background-image: linear-gradient(
+    to top,
+    var(--petal-core) 0%,
+    var(--petal-alt-mid) 55%,
+    var(--petal-alt-tip) 100%
+  );
 }
 
-/* Tầng 1: 4 cánh ngoài cùng (Outer Guard Petals) xoè rộng */
-.flower__leaf--outer-1 {
-  width: 8.6vmin;
-  height: 13.2vmin;
-  transform: translate(-50%, -14%) rotateX(18deg) scale(1.04);
-  filter: brightness(0.88);
-  z-index: 0;
+/* Lớp cánh phía sau tạo độ phồng 3D nhiều lớp */
+.flower__leaf--back-1 {
+  width: 9.2vmin;
+  height: 13vmin;
+  transform: translate(-50%, -12%) rotateX(22deg) scale(1.04);
+  opacity: 0.72;
+  filter: brightness(0.9);
 }
 
-.flower__leaf--outer-2 {
-  width: 8.4vmin;
-  height: 12.6vmin;
-  transform: translate(-50%, -8%) rotate(-36deg) rotateY(22deg) rotateX(-20deg);
-  filter: brightness(0.92);
-  z-index: 0;
+.flower__leaf--back-2 {
+  width: 8.8vmin;
+  height: 12.2vmin;
+  transform: translate(-5%, -6%) rotateY(28deg) rotateX(-35deg) rotate(24deg);
+  opacity: 0.78;
 }
 
-.flower__leaf--outer-3 {
-  width: 8.4vmin;
-  height: 12.6vmin;
-  transform: translate(-50%, -8%) rotate(36deg) rotateY(-22deg) rotateX(-20deg);
-  filter: brightness(0.92);
-  z-index: 0;
+.flower__leaf--back-3 {
+  width: 8.8vmin;
+  height: 12.2vmin;
+  transform: translate(-95%, -6%) rotateY(-28deg) rotateX(-35deg) rotate(-24deg);
+  opacity: 0.78;
 }
 
-.flower__leaf--outer-4 {
-  width: 8.2vmin;
-  height: 11.4vmin;
-  transform: translate(-50%, -4%) rotate(-64deg) rotateY(32deg) scale(0.92);
-  filter: brightness(0.86);
-  z-index: 0;
-}
-
-/* Tầng 2: 3 cánh lớp giữa (Middle Cup Petals) khum ôm lấy tâm */
-.flower__leaf--mid-1 {
-  width: 8.4vmin;
-  height: 12.4vmin;
-  transform: translate(-50%, -9%) rotate(-19deg) rotateY(18deg) rotateX(15deg);
-  z-index: 1;
-}
-
-.flower__leaf--mid-2 {
-  width: 8.4vmin;
-  height: 12.4vmin;
-  transform: translate(-50%, -9%) rotate(19deg) rotateY(-18deg) rotateX(15deg);
-  z-index: 1;
-}
-
-.flower__leaf--mid-3 {
-  width: 8.2vmin;
-  height: 11.4vmin;
-  transform: translate(-50%, -4%) rotate(64deg) rotateY(-32deg) scale(0.92);
-  filter: brightness(0.88);
-  z-index: 0;
-}
-
-/* Tầng 3: 5 cánh lớp trong & cánh tiền cảnh (Inner Crown Petals) */
+/* Lớp cánh chính phía trước */
 .flower__leaf--1 {
-  transform: translate(-10%, 1%) rotateY(38deg) rotateX(-46deg);
-  z-index: 2;
+  transform: translate(-8%, 1%) rotateY(38deg) rotateX(-48deg);
 }
 
 .flower__leaf--2 {
-  transform: translate(-50%, -5%) rotateX(36deg);
-  z-index: 2;
+  transform: translate(-50%, -5%) rotateX(38deg);
 }
 
 .flower__leaf--3 {
-  transform: translate(-90%, 1%) rotateY(40deg) rotateX(46deg);
-  z-index: 2;
+  transform: translate(-92%, 1%) rotateY(42deg) rotateX(48deg);
 }
 
 .flower__leaf--4 {
-  width: 7.8vmin;
-  height: 8.8vmin;
+  width: 8vmin;
+  height: 8.5vmin;
   transform-origin: bottom left;
-  border-radius: 4.5vmin 10vmin 4.5vmin 4.5vmin;
-  transform: translate(-2%, 16%) rotateX(66deg) rotate(-42deg);
-  z-index: 3;
-  opacity: 0.95;
+  border-radius: 4vmin 10vmin 4vmin 4vmin;
+  transform: translate(0%, 16%) rotateX(68deg) rotate(-42deg);
+  background-image: linear-gradient(
+    to top,
+    var(--petal-back) 0%,
+    var(--petal-mid) 70%,
+    var(--petal-tip) 100%
+  );
+  z-index: 2;
+  opacity: 0.88;
 }
 
 .flower__leaf--5 {
   width: 7.6vmin;
-  height: 8.6vmin;
+  height: 8.2vmin;
   transform-origin: bottom right;
-  border-radius: 10vmin 4.5vmin 4.5vmin 4.5vmin;
-  transform: translate(-98%, 16%) rotateX(66deg) rotate(42deg);
-  z-index: 3;
-  opacity: 0.94;
+  border-radius: 10vmin 4vmin 4vmin 4vmin;
+  transform: translate(-100%, 16%) rotateX(68deg) rotate(42deg);
+  background-image: linear-gradient(
+    to top,
+    var(--petal-back) 0%,
+    var(--petal-mid) 70%,
+    var(--petal-tip) 100%
+  );
+  z-index: 2;
+  opacity: 0.86;
 }
 
-/* Tâm hoa (Receptacle) và cụm 9 nhị hoa vàng kim chi tiết */
+/* Tâm hoa phát sáng ấm áp + nhị hoa vàng kim */
 .flower__white-circle {
   position: absolute;
   left: -3.8vmin;
   top: -3.2vmin;
-  width: 9.4vmin;
+  width: 9.5vmin;
   height: 4.2vmin;
   border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    #fffbeb 15%,
-    #fde047 55%,
-    #d97706 90%,
-    #92400e 100%
-  );
-  box-shadow:
-    0 0 2.2vmin rgba(253, 224, 71, 0.9),
-    inset 0 -0.4vmin 0.8vmin rgba(146, 64, 14, 0.6);
-  z-index: 2;
+  background: radial-gradient(circle, #fffbeb 20%, #fde68a 70%, #f59e0b 100%);
+  box-shadow: 0 0 2.5vmin rgba(253, 224, 71, 0.85);
+  z-index: 3;
 }
 
 .flower__white-circle::after {
   content: "";
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 48%;
   transform: translate(-50%, -50%);
-  width: 64%;
-  height: 62%;
+  width: 66%;
+  height: 66%;
   border-radius: inherit;
-  background: radial-gradient(circle, #fef9c3 0%, #f59e0b 75%, #b45309 100%);
+  background-image: linear-gradient(90deg, #f59e0b, #fef08a, #fb923c);
+  box-shadow: inset 0 0 1vmin rgba(180, 83, 9, 0.5);
 }
 
-/* Nhị hoa (Stamens) cong mảnh mai với bao phấn phát sáng */
+/* Nhị hoa (Stamens) vươn lên từ tâm */
 .stamen {
   position: absolute;
-  bottom: 50%;
+  bottom: 55%;
   left: 50%;
-  width: 0.22vmin;
-  height: 3.8vmin;
-  background: linear-gradient(to top, #d97706 0%, #fde047 65%, #ffffff 100%);
+  width: 0.25vmin;
+  height: 3.4vmin;
+  background: linear-gradient(to top, #f59e0b, #fef9c3);
   transform-origin: bottom center;
   border-radius: 1vmin;
 }
@@ -622,85 +601,58 @@ body {
 .stamen::after {
   content: "";
   position: absolute;
-  top: -0.55vmin;
+  top: -0.6vmin;
   left: 50%;
   transform: translateX(-50%);
-  width: 0.85vmin;
-  height: 0.55vmin;
+  width: 0.8vmin;
+  height: 0.8vmin;
   border-radius: 50%;
   background: #fef08a;
-  box-shadow:
-    0 0 0.7vmin #fde047,
-    0 0 1.3vmin #f59e0b;
+  box-shadow: 0 0 0.8vmin #fde047, 0 0 1.4vmin #f59e0b;
 }
 
 .stamen--1 {
-  transform: translateX(-50%) rotate(-38deg);
-  height: 2.9vmin;
+  transform: translateX(-50%) rotate(-26deg);
+  height: 3.1vmin;
 }
 .stamen--2 {
-  transform: translateX(-50%) rotate(-27deg);
-  height: 3.4vmin;
+  transform: translateX(-50%) rotate(-12deg);
+  height: 3.7vmin;
 }
 .stamen--3 {
-  transform: translateX(-50%) rotate(-16deg);
-  height: 3.9vmin;
+  transform: translateX(-50%) rotate(0deg);
+  height: 4vmin;
 }
 .stamen--4 {
-  transform: translateX(-50%) rotate(-7deg);
-  height: 4.3vmin;
+  transform: translateX(-50%) rotate(13deg);
+  height: 3.6vmin;
 }
 .stamen--5 {
-  transform: translateX(-50%) rotate(0deg);
-  height: 4.5vmin;
-}
-.stamen--6 {
-  transform: translateX(-50%) rotate(8deg);
-  height: 4.2vmin;
-}
-.stamen--7 {
-  transform: translateX(-50%) rotate(18deg);
-  height: 3.8vmin;
-}
-.stamen--8 {
-  transform: translateX(-50%) rotate(28deg);
-  height: 3.3vmin;
-}
-.stamen--9 {
-  transform: translateX(-50%) rotate(39deg);
-  height: 2.8vmin;
+  transform: translateX(-50%) rotate(27deg);
+  height: 3.1vmin;
 }
 
-/* Thân hoa có khối trụ 3D tự nhiên */
+/* Thân hoa phát sáng xanh ngọc lục bảo */
 .flower__line {
   height: 55vmin;
-  width: 1.55vmin;
+  width: 1.5vmin;
   background-image:
     linear-gradient(
       to left,
-      rgba(0, 0, 0, 0.38),
-      transparent 40%,
-      rgba(255, 255, 255, 0.35) 75%,
-      rgba(0, 0, 0, 0.2)
+      rgba(0, 0, 0, 0.25),
+      transparent,
+      rgba(255, 255, 255, 0.3)
     ),
-    linear-gradient(
-      to top,
-      transparent 6%,
-      var(--stem-dark) 25%,
-      var(--stem-mid) 68%,
-      var(--stem-bright) 100%
-    );
+    linear-gradient(to top, transparent 8%, var(--stem-dark), var(--leaf-cyan), #6ee7b7);
   box-shadow:
-    inset 0 0 2px rgba(0, 0, 0, 0.6),
-    0 0 1vmin rgba(20, 184, 166, 0.22);
-  border-radius: 1vmin;
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
+    0 0 1.2vmin rgba(34, 211, 238, 0.25);
   animation: grow-flower-tree 4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* Lá trên thân cây có sống gân lá chính & giọt sương nhỏ */
 .flower__line__leaf {
-  --w: 7.4vmin;
-  --h: calc(var(--w) + 2.4vmin);
+  --w: 7.2vmin;
+  --h: calc(var(--w) + 2.2vmin);
   position: absolute;
   top: 20%;
   left: 90%;
@@ -708,37 +660,13 @@ body {
   height: var(--h);
   border-top-right-radius: var(--h);
   border-bottom-left-radius: var(--h);
-  background-image:
-    /* Sống gân lá chéo từ cuống lên đầu lá */
-    linear-gradient(
-      40deg,
-      transparent 47%,
-      rgba(204, 251, 241, 0.45) 50%,
-      transparent 53%
-    ),
-    linear-gradient(
-      to top,
-      rgba(6, 78, 59, 0.65) 0%,
-      #0d9488 50%,
-      #2dd4bf 82%,
-      #a7f3d0 100%
-    );
-  box-shadow:
-    inset 0 0 1.2vmin rgba(255, 255, 255, 0.28),
-    0 0.3vmin 0.8vmin rgba(0, 0, 0, 0.3);
-}
-
-/* Giọt sương long lanh đọng trên lá */
-.flower__line__leaf::after {
-  content: "";
-  position: absolute;
-  top: 32%;
-  left: 38%;
-  width: 0.7vmin;
-  height: 0.7vmin;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff, rgba(167, 243, 208, 0.4));
-  box-shadow: 0 0 0.6vmin rgba(255, 255, 255, 0.8);
+  background-image: linear-gradient(
+    to top,
+    rgba(13, 110, 120, 0.45),
+    #22d3ee 65%,
+    #a7f3d0 100%
+  );
+  box-shadow: inset 0 0 1vmin rgba(255, 255, 255, 0.25);
 }
 
 .flower__line__leaf--1 {
@@ -760,20 +688,6 @@ body {
   left: -460%;
   top: 12%;
   transform: rotate(-70deg) rotateY(30deg);
-  background-image:
-    linear-gradient(
-      -40deg,
-      transparent 47%,
-      rgba(204, 251, 241, 0.45) 50%,
-      transparent 53%
-    ),
-    linear-gradient(
-      to top,
-      rgba(6, 78, 59, 0.65) 0%,
-      #0d9488 50%,
-      #2dd4bf 82%,
-      #a7f3d0 100%
-    );
 }
 
 .flower__line__leaf--4 {
@@ -797,8 +711,8 @@ body {
 .flower__light {
   position: absolute;
   bottom: 0vmin;
-  width: 1vmin;
-  height: 1vmin;
+  width: 1.1vmin;
+  height: 1.1vmin;
   background-color: #fef08a;
   border-radius: 50%;
   filter: blur(0.15vmin);
@@ -1806,20 +1720,20 @@ body {
 @keyframes moving-flower-4 {
   0%,
   100% {
-    transform: rotate(-31deg) scale(0.82);
+    transform: rotate(-32deg) scale(0.84);
   }
   50% {
-    transform: rotate(-35deg) scale(0.82);
+    transform: rotate(-36deg) scale(0.84);
   }
 }
 
 @keyframes moving-flower-5 {
   0%,
   100% {
-    transform: rotate(32deg) scale(0.8);
+    transform: rotate(33deg) scale(0.82);
   }
   50% {
-    transform: rotate(28deg) scale(0.8);
+    transform: rotate(29deg) scale(0.82);
   }
 }
 
@@ -1882,32 +1796,16 @@ body {
 
 /* Tối ưu hiển thị cho màn hình điện thoại dọc (Mobile Portrait) */
 @media (max-width: 768px), (max-aspect-ratio: 4/5) {
+  body {
+    min-height: 100dvh;
+    height: 100dvh;
+  }
+
   .flowers {
-    transform: scale(1.22);
+    transform: scale(1.2);
     margin-bottom: 5vh;
   }
 
-  .flower--1 .flower__line {
-    height: 78vmin;
-  }
-
-  .flower--2 .flower__line {
-    height: 66vmin;
-  }
-
-  .flower--3 .flower__line {
-    height: 62vmin;
-  }
-
-  .flower--4 {
-    transform: rotate(-27deg) scale(0.82);
-  }
-
-  .flower--5 {
-    transform: rotate(28deg) scale(0.8);
-  }
-
-  /* Gom khóm cỏ hai bên vào khung hình dọc của điện thoại */
   .long-g--0,
   .long-g--1 {
     left: -32vmin;
@@ -1932,18 +1830,11 @@ body {
   .long-g--7 {
     left: 24vmin;
   }
-
-  .moon {
-    top: 6vh;
-    right: 8vw;
-    width: 13vmin;
-    height: 13vmin;
-  }
 }
 
 @media (max-width: 480px) {
   .flowers {
-    transform: scale(1.32);
+    transform: scale(1.3);
     margin-bottom: 6vh;
   }
 }
