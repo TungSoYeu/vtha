@@ -4,65 +4,49 @@ window.addEventListener("load", () => {
     clearTimeout(startTimer);
   }, 800);
 
-  // Nút Xem hoa nở lại từ đầu
-  const replayBtn = document.getElementById("replay-btn");
-  const flowersContainer = document.querySelector(".flowers");
-  if (replayBtn && flowersContainer) {
-    replayBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      document.body.classList.add("not-loaded");
-      const clone = flowersContainer.cloneNode(true);
-      flowersContainer.parentNode.replaceChild(clone, flowersContainer);
-      setTimeout(() => {
-        document.body.classList.remove("not-loaded");
-      }, 150);
-    });
-  }
-
-  // Đổi chủ đề màu sắc của hoa
-  const themeButtons = document.querySelectorAll("[data-theme-select]");
-  themeButtons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const theme = btn.getAttribute("data-theme-select");
-      document.body.setAttribute("data-theme", theme);
-      themeButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
-
-  // Canvas bầu trời sao lấp lánh, sao băng & bụi tiên tương tác
+  // Canvas bầu trời sao lấp lánh, sao băng & bụi sao tương tác (hỗ trợ màn hình Retina / Điện thoại)
   const canvas = document.getElementById("sky-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  let isMobile = width <= 768;
 
-  window.addEventListener("resize", () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+  function resizeCanvas() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    isMobile = width <= 768;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
 
   const starColors = ["#ffffff", "#ffe4e6", "#bae6fd", "#fef08a", "#e9d5ff"];
-  const stars = Array.from({ length: 170 }, () => ({
+  const starCount = isMobile ? 110 : 170;
+  const stars = Array.from({ length: starCount }, () => ({
     x: Math.random() * width,
     y: Math.random() * height * 0.85,
-    r: Math.random() * 1.5 + 0.3,
-    alpha: Math.random(),
-    speed: Math.random() * 0.02 + 0.005,
+    r: Math.random() * 1.4 + 0.3,
+    alpha: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.02 + 0.006,
     color: starColors[Math.floor(Math.random() * starColors.length)],
   }));
 
   // Đom đóm lơ lửng quanh vườn hoa
-  const fireflies = Array.from({ length: 28 }, () => ({
-    x: width * 0.2 + Math.random() * width * 0.6,
+  const fireflyCount = isMobile ? 18 : 28;
+  const fireflies = Array.from({ length: fireflyCount }, () => ({
+    x: width * 0.15 + Math.random() * width * 0.7,
     y: height * 0.35 + Math.random() * height * 0.6,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: -Math.random() * 0.55 - 0.15,
-    r: Math.random() * 2.2 + 1,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: -Math.random() * 0.5 - 0.15,
+    r: Math.random() * 2 + 1,
     phase: Math.random() * Math.PI * 2,
-    hue: Math.random() > 0.45 ? 50 : 185,
+    hue: Math.random() > 0.45 ? 48 : 180,
   }));
 
   // Sao băng
@@ -71,9 +55,9 @@ window.addEventListener("load", () => {
     if (meteors.length > 2) return;
     meteors.push({
       x: Math.random() * width * 0.85 + width * 0.1,
-      y: Math.random() * height * 0.3,
-      len: Math.random() * 90 + 60,
-      speed: Math.random() * 7 + 8,
+      y: Math.random() * height * 0.28,
+      len: isMobile ? Math.random() * 60 + 45 : Math.random() * 90 + 60,
+      speed: isMobile ? Math.random() * 5 + 6 : Math.random() * 7 + 8,
       alpha: 1,
       angle: Math.PI * 0.78,
     });
@@ -81,20 +65,20 @@ window.addEventListener("load", () => {
 
   setInterval(() => {
     if (Math.random() < 0.65) spawnMeteor();
-  }, 3200);
+  }, 3400);
 
-  // Hạt bụi sao khi di chuột hoặc chạm màn hình
+  // Hạt bụi sao khi di chuột hoặc chạm tay trên điện thoại
   const sparkles = [];
   function addSparkles(x, y, count = 3) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const spd = Math.random() * 2.2 + 0.4;
+      const spd = Math.random() * 2 + 0.4;
       sparkles.push({
         x,
         y,
         vx: Math.cos(angle) * spd,
-        vy: Math.sin(angle) * spd - 0.4,
-        r: Math.random() * 2.4 + 0.8,
+        vy: Math.sin(angle) * spd - 0.35,
+        r: Math.random() * 2.2 + 0.8,
         alpha: 1,
         color: starColors[Math.floor(Math.random() * starColors.length)],
       });
@@ -102,11 +86,11 @@ window.addEventListener("load", () => {
   }
 
   window.addEventListener("pointermove", (e) => {
-    if (Math.random() < 0.6) addSparkles(e.clientX, e.clientY, 2);
+    if (Math.random() < 0.55) addSparkles(e.clientX, e.clientY, 2);
   });
 
   window.addEventListener("pointerdown", (e) => {
-    addSparkles(e.clientX, e.clientY, 18);
+    addSparkles(e.clientX, e.clientY, 14);
   });
 
   function render() {
@@ -125,19 +109,19 @@ window.addEventListener("load", () => {
 
     // Vẽ đom đóm bay lên
     for (const f of fireflies) {
-      f.x += f.vx + Math.sin(f.phase) * 0.25;
+      f.x += f.vx + Math.sin(f.phase) * 0.22;
       f.y += f.vy;
       f.phase += 0.03;
 
       if (f.y < height * 0.15) {
         f.y = height * 0.92;
-        f.x = width * 0.25 + Math.random() * width * 0.5;
+        f.x = width * 0.18 + Math.random() * width * 0.64;
       }
 
       const glow = 0.35 + ((Math.sin(f.phase * 2) + 1) / 2) * 0.65;
       ctx.save();
       ctx.globalAlpha = glow;
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 10;
       ctx.shadowColor = `hsl(${f.hue}, 100%, 70%)`;
       ctx.fillStyle = `hsl(${f.hue}, 100%, 80%)`;
       ctx.beginPath();
@@ -153,7 +137,7 @@ window.addEventListener("load", () => {
       const dy = Math.sin(m.angle) * m.speed;
       m.x += dx;
       m.y += dy;
-      m.alpha -= 0.014;
+      m.alpha -= 0.015;
 
       if (m.alpha <= 0 || m.x < -100 || m.y > height) {
         meteors.splice(i, 1);
@@ -169,7 +153,7 @@ window.addEventListener("load", () => {
 
       ctx.save();
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1.8;
       ctx.lineCap = "round";
       ctx.beginPath();
       ctx.moveTo(m.x, m.y);
@@ -183,7 +167,7 @@ window.addEventListener("load", () => {
       const sp = sparkles[i];
       sp.x += sp.vx;
       sp.y += sp.vy;
-      sp.alpha -= 0.022;
+      sp.alpha -= 0.024;
       if (sp.alpha <= 0) {
         sparkles.splice(i, 1);
         continue;
